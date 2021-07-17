@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  管理DAO组件  -->
+    <bean class="init.DeptDAOImpl" id="deptDAO"></bean>
+
+    <!--  管理Service组件  -->
+    <bean class="init.DeptServiceImpl" id="deptService">
+        <!-- 使用property完成属性赋值操作 -->
+        <!-- name:声明的成员变量名  ref:添加的组件id值 -->
+        <property name="deptDAO" ref="deptDAO"/>
+        <!-- SET注入相关语法    总结：八种基本类型+String类型注入+Date类型 使用的是value属性进行赋值-->
+        <property name="name" value="字符串类型"/>
+        <property name="price" value="2.222"/>
+        <property name="sex" value="true"/>
+        <!-- 注意：在Spring技术栈中日期格式默认为yyyy/MM/dd HH:mm:ss -->
+        <property name="bir" value="2021/12/20"/>
+        <!-- 注入数组类型array -->
+        <property name="qqs">
+            <array>
+                <value>测试一</value>
+                <value>测试二</value>
+                <value>测试三</value>
+                <value>测试四</value>
+                <value>测试五</value>
+            </array>
+        </property>
+        <property name="deptDAOS">
+            <array>
+                <ref bean="deptDAO"/>
+                <ref bean="deptDAO"/>
+                <ref bean="deptDAO"/>
+            </array>
+        </property>
+        <!-- 注入list集合 -->
+        <property name="habbys">
+            <list>
+                <value>睡觉</value>
+                <value>吃饭</value>
+                <value>打豆豆</value>
+                <value>再打豆豆</value>
+            </list>
+        </property>
+        <property name="deptDAOList">
+            <list>
+                <ref bean="deptDAO"/>
+                <ref bean="deptDAO"/>
+                <ref bean="deptDAO"/>
+            </list>
+        </property>
+        <!-- 注入map entry-->
+        <property name="maps">
+            <map>
+                <entry key="aa" value="小城"/>
+                <entry key="bb" value="中城"/>
+                <entry key="cc" value="大城"/>
+            </map>
+        </property>
+        <!-- 注入properties 集合使用props标签-->
+        <property name="properties">
+            <props>
+                <prop key="driver">com.mysql.jdbc.Driver</prop>
+                <prop key="url">jdbc:mysql://localhost:3306/test</prop>
+                <prop key="username">root</prop>
+                <prop key="password">root</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

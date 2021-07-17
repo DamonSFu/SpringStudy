@@ -10,8 +10,15 @@ public class TestDept {
         ApplicationContext context = new ClassPathXmlApplicationContext("init/spring.xml");
 
         // 获取对象
-        DeptDAO deptDAO = (DeptDAO) context.getBean("deptDAO");
+        /**
+         * 当加入业务层（Service）后，可直接调用业务层，此处可以不用再调用
+         *
+         * DeptDAO deptDAO = (DeptDAO) context.getBean("deptDAO");
+         * deptDAO.save("测试一");
+         */
+        DeptService deptService = (DeptService) context.getBean("deptService");
+        deptService.save("测试");
 
-        deptDAO.save("测试一");
+
     }
 }
