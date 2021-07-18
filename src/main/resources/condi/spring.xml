@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 管理DAO组件 -->
+    <bean class="condi.EmpDAOImpl" id="empDAO"></bean>
+
+    <!-- 管理Service组件
+        1、SET方式注入 注入时使用property标签
+        2、构造方法注入 注入时使用constructor-arg标签
+    -->
+    <bean class="condi.EmpServiceImpl" id="empService">
+        <constructor-arg index="0" name="name" value="String构造方式注入测试"/>
+        <constructor-arg index="1" name="age" value="22"/>
+        <constructor-arg index="2" name="empDAO" ref="empDAO"/>
+        <constructor-arg index="3" name="qqs">
+            <array>
+                <value>array1</value>
+                <value>array2</value>
+                <value>array3</value>
+            </array>
+        </constructor-arg>
+    </bean>
+</beans>
