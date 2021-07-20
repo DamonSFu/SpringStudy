@@ -1,11 +1,11 @@
 package staticproxy;
 
 // 注意：这里为每一个业务层通过手动开发一个代理对象的过程称之为 静态代理对象
-// 代理对象
+// 代理对象：保证原始功能不变的情况下，完成业务逻辑中附加操作
 public class UserServiceStaticProxy implements UserService{
 
+    // 依赖原始业务逻辑对象 // Target：目标对象|被代理对象称之为目标对象 原始业务逻辑对象
     private UserService userService;
-
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
