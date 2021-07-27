@@ -1,5 +1,7 @@
 package factorybean;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -21,13 +23,16 @@ public class TestFactoryBean {
 //        System.out.println(conn);
 
         ApplicationContext context = new ClassPathXmlApplicationContext("factorybean/spring.xml");
-        Calendar calendar = (Calendar) context.getBean("calendar");
-        Calendar calendar1 = (Calendar) context.getBean("calendar");
-        System.out.println(calendar == calendar1);
-        System.out.println(calendar.getTime());
+//        Calendar calendar = (Calendar) context.getBean("calendar");
+//        Calendar calendar1 = (Calendar) context.getBean("calendar");
+//        System.out.println(calendar == calendar1);
+//        System.out.println(calendar.getTime());
+//        Connection connection = (Connection) context.getBean("conn");
+//        System.out.println(connection);
 
-        Connection connection = (Connection) context.getBean("conn");
-        System.out.println(connection);
+        SqlSessionFactory sqlSessionFactoryBean = (SqlSessionFactory) context.getBean("sqlSessionFactory");
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession();
+        System.out.println(sqlSession);
 
     }
 }

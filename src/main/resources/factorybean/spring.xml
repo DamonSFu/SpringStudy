@@ -7,4 +7,28 @@
     <bean id="calendar" class="factorybean.CalendarFactoryBean"/>
     <bean id="conn" class="factorybean.ConnectionFactoryBean"/>
 
+    <!-- 管理SqlSessionFactory -->
+    <!-- mybatis官方封装了 不需要我们来创建 -->
+    <!--    <bean id="sqlSessionFactory" class="factorybean.SqlSessionFactoryBean">-->
+    <!--        <property name="configLocations" value="mybatis-config.xml"/>-->
+    <!--    </bean>-->
+
+
+    <!-- 创建数据源对象 druid C3p0 dbcp-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mybatis?characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- mybatis官方提供sqlSessionFactoryBean,不能再使用mybatis-config.xml -->
+        <!--<property name="configLocation" value="classpath:mybatis-config.xml"/>-->
+        <!-- 依赖数据源对象 druid C3p0 dbcp-->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 依赖mapper文件注册 -->
+    </bean>
+
 </beans>
