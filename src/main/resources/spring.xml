@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 创建数据源对象 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mybatis?characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+    <!-- 创建SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 依赖数据源对象 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 注入Mapper文件通用方式 -->
+        <property name="mapperLocations" value="classpath:com/springmybatis/mapper/*.xml"/>
+        <!-- 注入别名相关配置 typeAliasesPackage：用来给指定包中所有类起别名 默认的别名：类名/类名首字母小写 -->
+        <property name="typeAliasesPackage" value="com.springmybatis.entity"/>
+    </bean>
+
+    <!-- 创建DAO对象 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入SqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- 扫描DAO接口所在的包 -->
+        <property name="basePackage" value="com.springmybatis.dao"/>
+    </bean>
+
+    <!-- 创建事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 注入数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <!-- 根据事务管理器创建事务环绕通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 事务细粒度配置 -->
+        <tx:attributes>
+            <!--
+                propagation：事务传播属性
+                    REQUIRED（默认）：   需要事务。           如果外层没有事务，则开启新的事务；如果外层存在事务，则融入当前事务。
+                           SUPPORTS：   支持事务。           如果外层没有事务，不会开启新的事务；如果外层存在事务，则融入当前事务。（一般用于查询）
+                       REQUIRES_NEW：   每次开启新的事务。    如果外层存在事务，外层事务挂起，自己开启新的事务执行，执行完成，恢复外层事务继续执行。
+                      NOT_SUPPORTED：   不支持事务。         如果外层存在事务，外层事务挂起，自己以非事务方式执行，执行完成，恢复外部事务执行。
+                              NEVER：   不能有事务。         存在事务报错。
+                          MANDATORY：   强制事务。           没有事务报错。
+                             NESTED：   嵌套事务。           事务之间可以嵌套运行。数据库oracle，mysql不支持。
+            -->
+            <tx:method name="save"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="save"/>
+            <tx:method name="save"/>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置事务切面 -->
+    <aop:config>
+        <aop:pointcut id="pc" expression="within(com.springmybatis.service.*ServiceImpl)"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pc"/>
+    </aop:config>
+
+    <!-- 管理service层组件 -->
+    <bean id="userService" class="com.springmybatis.service.UserServiceImpl">
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+
+</beans>
