@@ -49,13 +49,13 @@
                               NEVER：   不能有事务。         存在事务报错。
                           MANDATORY：   强制事务。           没有事务报错。
                              NESTED：   嵌套事务。           事务之间可以嵌套运行。数据库oracle，mysql不支持。
+
+                isolation：事务隔离级别
             -->
             <tx:method name="save"/>
             <tx:method name="insert*" propagation="REQUIRED"/>
             <tx:method name="update*" propagation="REQUIRED"/>
-            <tx:method name="save"/>
-            <tx:method name="save"/>
-            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="find" propagation="SUPPORTS"/>
         </tx:attributes>
     </tx:advice>
 
@@ -69,5 +69,11 @@
     <bean id="userService" class="com.springmybatis.service.UserServiceImpl">
         <property name="userDAO" ref="userDAO"/>
     </bean>
+
+
+    <bean id="aService" class="com.springmybatis.service.AServiceImpl">
+        <property name="bbbService" ref="bService"/>
+    </bean>
+    <bean id="bService" class="com.springmybatis.service.BServiceImpl"/>
 
 </beans>

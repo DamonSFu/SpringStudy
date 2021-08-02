@@ -1,6 +1,6 @@
 package com.springmybatis.service;
 
 public interface AService {
-    void save();
+    void insert();
     String find();
 }
